@@ -1,5 +1,0 @@
-#!/bin/sh
-
-export MONGO_USERNAME=rsonthalia2
-export MONGO_PASSWORD=r7AKXGjmmLxKJMKN
-export OPENAI_API_KEY=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
