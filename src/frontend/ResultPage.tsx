@@ -1,53 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { responsivePropType } from 'react-bootstrap/esm/createUtilityClasses';
+import './LoginPage.css'; // You can change this if you have a separate CSS file for ResultPage
 
 export default function ResultPage() {
-  interface ResponseData {
-    output: string;
-  }
-
-  interface ServerResponse {
-    data: ResponseData;
-    status: number;
-    statusText: string;
-    headers: any;
-    config: any;
-  }
-
-  const [response, setResponse] = useState<ServerResponse | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState('')
+
 
   useEffect(() => {
-    axios.get('https://0.0.0.0:8080/openai')
-      .then((res) => {
-        console.log('Response:', res);
-        setResponse(res);  // Store the entire response
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.log('Error fetching data:', err);
-        setError('Failed to fetch data');
-        setLoading(false);
-      });
-  }, []);
+    axios.get('http://0.0.0.0:8080/openai')
+    .then((response) => {
 
-  if (loading) {
-    return <div className="result-container">Loading...</div>;
-  }
-
-  if (error) {
-    return <div className="result-container">Error: {error}</div>;
-  }
-
-  if (!response) {
-    return <div className="result-container">No data available</div>;
-  }
+      setData(response.data.output)
+      setLoading("false")
+    })
+    .catch((error) => {
+      console.log('Error fetching data:', error);
+      setError("Failed to fetch data")
+      setLoading("false")
+    })
+}, [])
 
   return (
-    <div className="result-container">
-      <h1>Result:</h1>
-      <p>{response.data.output}</p>  {/* Render the response directly */}
+    <div className = "result-container">
+      <h1>Result</h1>
+      <div dangerouslySetInnerHTML={{ __html: data}} />
     </div>
   );
 }
